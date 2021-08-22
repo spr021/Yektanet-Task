@@ -5,24 +5,8 @@ import { useEffect, useState } from 'react';
 import useSortableData from '../../utils/useSortableData';
 
 function Table() {
-
   const [listSize, setListSize] = useState(5)
-  // const [sortBy, setSortBy] = useState("")
-  // const [increase, setIncrease] = useState(true)
   const { items, requestSort } = useSortableData(Data);
-
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   if(sortBy !== "") {
-  //     params.set('sortBy', sortBy);
-  //     params.set('increase', increase);
-  //     window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
-  //   }
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const URLsortBy = urlParams.get('sortBy');
-  //   const URLincrease = urlParams.get('increase');
-  // },[sortBy, increase])
-  
   
   useEffect(() => {
     window.addEventListener('scroll',()=>{
