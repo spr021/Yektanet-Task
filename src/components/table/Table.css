@@ -1,0 +1,24 @@
+.table-head > td {
+  padding: 1em 2em;
+  background-color: navajowhite;
+  border: 1px solid #000;
+}
+
+.table-body > td {
+  padding: 1em 2em;
+  font-size: small;
+  font-weight: 500;
+  border: 1px solid #000;
+}
+
+.table-body:nth-child(even) {
+  background-color: white;
+}
+
+.table-body:nth-child(odd) {
+  background-color: lightgray;
+}
+
+.table-body:hover{
+  background-color: bisque;
+}

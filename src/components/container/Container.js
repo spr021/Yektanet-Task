@@ -1,9 +1,11 @@
+import Table from '../table/Table';
 import './Container.css';
 
 function Container() {
 
   return (
-    <main>
+    <main className="container">
+      <Table />
     </main>
   );
 }
