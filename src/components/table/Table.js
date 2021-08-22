@@ -1,12 +1,18 @@
-import { AD_NAME, DATE, FIELD, MODIFIER_NAME, NEW_VALUE, OLD_VALUE } from '../../constant/strings';
-import './Table.css';
+import { AD_NAME, DATE, FIELD, MODIFIER_NAME, NEW_VALUE, OLD_VALUE } from '../../constant/strings'
+import './Table.css'
 import Data from "../../constant/data.json"
-import { useEffect, useState } from 'react';
-import useSortableData from '../../utils/useSortableData';
+import { useEffect, useState } from 'react'
+import useSortableData from '../../utils/useSortableData'
 
 function Table() {
   const [listSize, setListSize] = useState(5)
-  const { items, requestSort } = useSortableData(Data);
+  const { items, requestSort } = useSortableData(Data)
+  
+  const params = new URLSearchParams(window.location.search)
+  const URLsort = params.get('sort')
+  const URLd = params.get('d')
+
+  let Icon = () => URLd === "ascending" ? <span>&#8607;</span> : URLd === "descending" ? <span>&#8609;</span> : <span>&nbsp;</span>
   
   useEffect(() => {
     window.addEventListener('scroll',()=>{
@@ -23,12 +29,12 @@ function Table() {
     <table>
       <thead>
         <tr className="table-head">
-          <td onClick={() => requestSort('name')}>&#8607;{MODIFIER_NAME}</td>
-          <td onClick={() => requestSort('date')}>&#8609;{DATE}</td>
-          <td onClick={() => requestSort('title')}>&nbsp;{AD_NAME}</td>
-          <td onClick={() => requestSort('field')}>{FIELD}</td>
-          <td onClick={() => requestSort('old_value')}>{OLD_VALUE}</td>
-          <td onClick={() => requestSort('new_value')}>{NEW_VALUE}</td>
+          <td onClick={() => requestSort('name')}>{MODIFIER_NAME} {URLsort === "name" && <Icon />}</td>
+          <td onClick={() => requestSort('date')}>{DATE} {URLsort === "date" && <Icon />}</td>
+          <td onClick={() => requestSort('title')}>{AD_NAME} {URLsort === "title" && <Icon />}</td>
+          <td onClick={() => requestSort('field')}>{FIELD} {URLsort === "field" && <Icon />}</td>
+          <td onClick={() => requestSort('old_value')}>{OLD_VALUE} {URLsort === "old_value" && <Icon />}</td>
+          <td onClick={() => requestSort('new_value')}>{NEW_VALUE} {URLsort === "new_value" && <Icon />}</td>
         </tr>
       </thead>
       <tbody id="infinite-list">
@@ -44,7 +50,7 @@ function Table() {
         )}
       </tbody>
     </table>
-  );
+  )
 }
 
-export default Table;
+export default Table
