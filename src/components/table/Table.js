@@ -6,7 +6,8 @@ import useSortableData from '../../utils/useSortableData'
 
 function Table() {
   const [listSize, setListSize] = useState(5)
-  const { items, requestSort } = useSortableData(Data)
+  const { items, requestSort, bookMarkList } = useSortableData(Data)
+  const bookMarkm = JSON.parse(window.localStorage.getItem("book-mark")) || []
   
   const params = new URLSearchParams(window.location.search)
   const URLsort = params.get('sort')
@@ -39,7 +40,7 @@ function Table() {
       </thead>
       <tbody id="infinite-list">
         {items.slice(0, listSize).map((item) => 
-          <tr key={item.id} className="table-body">
+          <tr onClick={() => bookMarkList(item.id)} key={item.id} className="table-body" style={{backgroundColor: bookMarkm.includes(item.id) && "yellow"}}>
             <td>{item.name}</td>
             <td>{new Date(item.date).toLocaleDateString("fa-IR")}</td>
             <td>{item.title}</td>

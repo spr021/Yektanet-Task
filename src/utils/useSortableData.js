@@ -2,6 +2,14 @@ import { useEffect, useMemo, useState } from "react"
 
 const useSortableData = (items, config = null) => {
   const [sortConfig, setSortConfig] = useState(config)
+  const [bookMark, setBookMark] = useState([])
+
+  const bookMarkList = (id) => {
+    let BookMark = JSON.parse(window.localStorage.getItem("book-mark")) || []
+    BookMark.includes(id) ? BookMark = BookMark.filter(el => el !== id) : BookMark.push(id)
+    window.localStorage.setItem("book-mark", JSON.stringify(BookMark))
+    setBookMark(BookMark)
+  }
   
   const sortedItems = useMemo(() => {
     let sortableItems = [...items]
@@ -16,8 +24,12 @@ const useSortableData = (items, config = null) => {
         return 0
       })
     }
+    bookMark &&
+    bookMark.forEach(bookMark => {
+      sortableItems.sort((x,y) => { return x.id === bookMark ? -1 : y.id === bookMark ? 1 : 0; });
+    })
     return sortableItems
-  }, [items, sortConfig])
+  }, [items, sortConfig, bookMark])
   
   const requestSort = (key, direction) => {
     direction = direction || "ascending"
@@ -38,10 +50,12 @@ const useSortableData = (items, config = null) => {
     const URLd = params.get('d')
     setSortConfig({ URLsort, URLd })
     requestSort(URLsort, URLd)
+    JSON.parse(window.localStorage.getItem("book-mark")) &&
+    setBookMark(JSON.parse(window.localStorage.getItem("book-mark")))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  return { items: sortedItems, requestSort }
+  return { items: sortedItems, requestSort, bookMarkList }
 }
 
 export default useSortableData
