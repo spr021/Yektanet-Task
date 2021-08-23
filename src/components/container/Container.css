@@ -1,15 +1,13 @@
 .container {
   width: 95%;
   height: 95%;
+  padding: 2.5%;
+  margin: 2.5%;
   background-color: lightgoldenrodyellow;
-  position: absolute;
-  top: 50%; 
-  right: 50%;
-  transform: translate(50%,-50%);
   border-radius: 8px;
   box-shadow: 1px 1px #ccc;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

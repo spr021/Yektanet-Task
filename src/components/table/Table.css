@@ -1,3 +1,7 @@
+.table{
+  max-height: 80vh;
+}
+
 .table-head > td {
   padding: 1em 2em;
   background-color: navajowhite;
@@ -21,4 +25,23 @@
 
 .table-body:hover{
   background-color: bisque;
+}
+
+.search {
+  margin: 0em 1em 1em 1em;
+  padding: 0em 1em 1em 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.search > div {
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+}
+
+.search > div > label {
+  margin-bottom: 0.5em;
 }
