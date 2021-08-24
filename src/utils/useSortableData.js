@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useState } from "react"
 
-const useSortableData = (items, config = null) => {
+const useSortableData = (items, config = {bookMarks: []}) => {
   const [sortConfig, setSortConfig] = useState(config)
-  const [bookMark, setBookMark] = useState([])
   console.log(sortConfig)
 
   const bookMarkList = (id) => {
     let BookMark = JSON.parse(window.localStorage.getItem("book-mark")) || []
     BookMark.includes(id) ? BookMark = BookMark.filter(el => el !== id) : BookMark.push(id)
     window.localStorage.setItem("book-mark", JSON.stringify(BookMark))
-    setBookMark(BookMark)
+    setSortConfig({...sortConfig, bookMarks: BookMark})
   }
   
   const sortedItems = useMemo(() => {
@@ -46,13 +45,13 @@ const useSortableData = (items, config = null) => {
       })
     }
     
-    if(bookMark) {
-      bookMark.forEach(bookMark => {
+    if(sortConfig.bookMarks) {
+      sortConfig.bookMarks.forEach(bookMark => {
         sortableItems.sort((x,y) => { return x.id === bookMark ? -1 : y.id === bookMark ? 1 : 0 })
       })
     }
     return sortableItems
-  }, [items, sortConfig, bookMark])
+  }, [items, sortConfig])
   
   const requestSort = (key, direction) => {
     direction = direction || "ascending"
@@ -75,10 +74,9 @@ const useSortableData = (items, config = null) => {
     const params = new URLSearchParams(window.location.search)
     const URLsort = params.get('sort')
     const URLd = params.get('d')
-    setSortConfig({...sortConfig, URLsort, URLd })
     requestSort(URLsort, URLd)
     JSON.parse(window.localStorage.getItem("book-mark")) &&
-    setBookMark(JSON.parse(window.localStorage.getItem("book-mark")))
+    setSortConfig({...sortConfig, URLsort, URLd, bookMarks: JSON.parse(window.localStorage.getItem("book-mark"))})
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
