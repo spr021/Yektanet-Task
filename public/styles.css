@@ -50,7 +50,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
     direction: rtl;
-	line-height: 1;
+	line-height: 1.2;
     height: 100vh;
     overflow-x: hidden;
 }
@@ -373,3 +373,10 @@ fieldset {
 textarea {
     resize: vertical;
 }
+
+@media screen and (max-width:481px) {
+    body {
+        height: auto;
+        font-size: 80%;
+    }
+  }
