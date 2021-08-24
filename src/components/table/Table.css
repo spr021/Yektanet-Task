@@ -30,6 +30,10 @@
   background-color: bisque;
 }
 
+.book-mark {
+  background-color: yellow !important;
+}
+
 .search {
   margin: 0em 1em 1em 1em;
   padding: 0em 1em 1em 1em;

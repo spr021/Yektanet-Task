@@ -2,17 +2,23 @@ import { useEffect, useMemo, useState } from "react"
 
 const useSortableData = (items, config = {bookMarks: []}) => {
   const [sortConfig, setSortConfig] = useState(config)
-  console.log(sortConfig)
+  const bookMarkList = JSON.parse(window.localStorage.getItem("book-mark")) || []
 
-  const bookMarkList = (id) => {
-    let BookMark = JSON.parse(window.localStorage.getItem("book-mark")) || []
-    BookMark.includes(id) ? BookMark = BookMark.filter(el => el !== id) : BookMark.push(id)
-    window.localStorage.setItem("book-mark", JSON.stringify(BookMark))
-    setSortConfig({...sortConfig, bookMarks: BookMark})
+  const addToBookMark = (id) => {
+    if([...sortConfig.bookMarks].includes(id)) {  
+      setSortConfig({...sortConfig, bookMarks: [...sortConfig.bookMarks.filter(el => el !== id)]})
+      ////
+      window.localStorage.setItem("book-mark", JSON.stringify([...sortConfig.bookMarks.filter(el => el !== id)]))
+    } else {
+      setSortConfig({...sortConfig, bookMarks: [...sortConfig.bookMarks, id]})
+      /////
+      window.localStorage.setItem("book-mark", JSON.stringify([...sortConfig.bookMarks, id]))
+    } 
   }
   
   const sortedItems = useMemo(() => {
     let sortableItems = [...items]
+    // sort by table head
     if (sortConfig !== null && sortConfig.key !== null) {
       sortableItems
       .sort((a, b) => {
@@ -25,7 +31,7 @@ const useSortableData = (items, config = {bookMarks: []}) => {
         return 0
       })
     }
-
+    // search by value
     if (sortConfig !== null && sortConfig.search && sortConfig.value) {
       sortableItems = sortableItems
       .filter(item => {
@@ -44,8 +50,8 @@ const useSortableData = (items, config = {bookMarks: []}) => {
         }
       })
     }
-    
-    if(sortConfig.bookMarks) {
+    // move book marks to up
+    if (sortConfig.bookMarks) {
       sortConfig.bookMarks.forEach(bookMark => {
         sortableItems.sort((x,y) => { return x.id === bookMark ? -1 : y.id === bookMark ? 1 : 0 })
       })
@@ -75,12 +81,11 @@ const useSortableData = (items, config = {bookMarks: []}) => {
     const URLsort = params.get('sort')
     const URLd = params.get('d')
     requestSort(URLsort, URLd)
-    JSON.parse(window.localStorage.getItem("book-mark")) &&
-    setSortConfig({...sortConfig, URLsort, URLd, bookMarks: JSON.parse(window.localStorage.getItem("book-mark"))})
+    setSortConfig({...sortConfig, URLsort, URLd, bookMarks: bookMarkList})
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  return { items: sortedItems, requestSort, requestSearch, bookMarkList }
+  return { items: sortedItems, requestSort, requestSearch, addToBookMark }
 }
 
 export default useSortableData
