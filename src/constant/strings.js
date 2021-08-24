@@ -6,3 +6,4 @@ export const OLD_VALUE = "مقدار قدیمی";
 export const NEW_VALUE = "مقدار جدید";
 export const TITLE = "عنوان";
 export const PRICE = "قیمت";
+export const PRESS_ENTER = "Enter را فشار دهید";

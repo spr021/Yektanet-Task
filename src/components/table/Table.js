@@ -1,13 +1,13 @@
-import { AD_NAME, DATE, FIELD, MODIFIER_NAME, NEW_VALUE, OLD_VALUE, PRICE, TITLE } from '../../constant/strings'
+import { AD_NAME, DATE, FIELD, MODIFIER_NAME, NEW_VALUE, OLD_VALUE, PRESS_ENTER, PRICE, TITLE } from '../../constant/strings'
 import './Table.css'
 import Data from "../../constant/data.json"
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useSortableData from '../../utils/useSortableData'
 
 function Table() {
-  const [listSize, setListSize] = useState(30)
-  console.log(listSize)
-  const { items, requestSort, bookMarkList } = useSortableData(Data)
+  const [listSize, setListSize] = useState(20)
+
+  const { items, requestSort, requestSearch, bookMarkList } = useSortableData(Data)
   const bookMarkm = JSON.parse(window.localStorage.getItem("book-mark")) || []
   
   const params = new URLSearchParams(window.location.search)
@@ -16,35 +16,37 @@ function Table() {
 
   let Icon = () => URLd === "ascending" ? <span>&#8607;</span> : URLd === "descending" ? <span>&#8609;</span> : <span>&nbsp;</span>
   
-  useEffect(() => {
-    window.addEventListener('scroll',()=>{
-      if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
-        setListSize(listSize + 10)
-      }
-    })
-    return(
-      window.removeEventListener("scroll", () => {})
-    )
-  },[listSize])
+  window.onscroll = () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+      setListSize(listSize + 10)
+    }
+  }
+
+  const clearInput = (e) => {
+    e.target.value = null
+    requestSearch()
+  }
 
   return (
     <>
       <div className="search">
-        <div>
+        <div className="tooltip">
+          <span className="tooltiptext">{PRESS_ENTER}</span>
           <label>{MODIFIER_NAME}</label>
-          <input type="text" name={MODIFIER_NAME} />
+          <input onBlur={clearInput} className="input" onKeyDown={(e) => e.key === 'Enter' && requestSearch("name", e.target.value)} type="text" name={MODIFIER_NAME} />
         </div>
         <div>
           <label>{DATE}</label>
-          <input type="date" name={DATE} />
+          <input onBlur={clearInput} className="input" onChange={(e) => requestSearch("date", e.target.value)} type="date" name={DATE} />
         </div>
-        <div>
+        <div className="tooltip">
+          <span className="tooltiptext">{PRESS_ENTER}</span>
           <label>{AD_NAME}</label>
-          <input type="text" name={AD_NAME} />
+          <input onBlur={clearInput} className="input" onKeyDown={(e) => e.key === 'Enter' && requestSearch("title", e.target.value)} type="text" name={AD_NAME} />
         </div>
         <div>
           <label>{FIELD}</label>
-          <select name={FIELD}>
+          <select onBlur={clearInput} className="input" onChange={(e) => requestSearch("field", e.target.value)} name={FIELD}>
             <option value={TITLE}>{TITLE}</option>
             <option value={PRICE}>{PRICE}</option>
           </select>
